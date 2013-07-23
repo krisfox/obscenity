@@ -5,6 +5,7 @@ module Obscenity
     
     DEFAULT_WHITELIST = []
     DEFAULT_BLACKLIST = File.dirname(__FILE__) + "/../../config/blacklist.yml"
+    DEFAULT_WORDLIST  = File.dirname(__FILE__) + "/../../config/blacklist_standalone.yml"
     
     def initialize
       yield(self) if block_given?
@@ -19,8 +20,16 @@ module Obscenity
       @blacklist ||= DEFAULT_BLACKLIST
     end
     
+    def blacklist_words
+      @blacklist_words ||= DEFAULT_WORDLIST
+    end
+    
     def blacklist=(value)
       @blacklist = value == :default ? DEFAULT_BLACKLIST : value
+    end
+    
+    def blacklist_words=(value)
+      @blacklist_words = value == :default ? DEFAULT_WORDLIST : value
     end
     
     def whitelist
@@ -33,7 +42,7 @@ module Obscenity
     
     private
     def validate_config_options
-      [@blacklist, @whitelist].each{ |content| validate_list_content(content) if content }
+      [@blacklist, @whitelist, @blacklist_words].each{ |content| validate_list_content(content) if content }
     end
     
     def validate_list_content(content)

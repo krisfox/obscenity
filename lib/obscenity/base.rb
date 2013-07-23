@@ -5,9 +5,17 @@ module Obscenity
       def blacklist
         @blacklist ||= set_list_content(Obscenity.config.blacklist)
       end
+      
+      def blacklist_words
+        @blacklist_words ||= set_list_content(Obscenity.config.blacklist_words)
+      end
 
       def blacklist=(value)
         @blacklist = value == :default ? set_list_content(Obscenity::Config.new.blacklist) : value
+      end
+      
+      def blacklist_words=(value)
+        @blacklist_words = value == :default ? set_list_content(Obscenity::Config.new.blacklist_words) : value
       end
 
       def whitelist
@@ -23,14 +31,21 @@ module Obscenity
         blacklist.each do |foul|
           return(true) if text =~ /(#{foul})/i && !whitelist.include?(foul)
         end
+        blacklist_words.each do |foul|
+          return(true) if text =~ /\b#{foul}\b/i && !whitelist.include?(foul)
+        end
         false
       end
 
       def sanitize(text)
         return(text) unless text.to_s.size >= 3
-        blacklist.each do |foul|
-          text.gsub!(/(#{foul})/i, replace(foul)) unless whitelist.include?(foul)
+        # blacklist.each do |foul|
+        #   text.gsub!(/(#{foul})/i, replace(foul)) unless whitelist.include?(foul)
+        # end
+        (blacklist_words+blacklist).each do |foul|
+          text.gsub!(/\b#{foul}\b/i, replace(foul)) unless whitelist.include?(foul)
         end
+        
         @scoped_replacement = nil
         text
       end
@@ -45,6 +60,9 @@ module Obscenity
         return(words) unless text.to_s.size >= 3
         blacklist.each do |foul|
           words << foul if text =~ /(#{foul})/i && !whitelist.include?(foul)
+        end
+        blacklist_words.each do |foul|
+          words << foul if text =~ /\b#{foul}\b/i && !whitelist.include?(foul)
         end
         words.uniq
       end

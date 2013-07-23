@@ -203,7 +203,7 @@ class TestBase < Test::Unit::TestCase
           Obscenity::Base.whitelist = :default
         }
         should "return an array with the offensive words based on the default list" do
-          assert_equal ['assclown'], Obscenity::Base.offensive('Yo assclown, sup')
+          assert_equal ['ass', 'assclown'], Obscenity::Base.offensive('Yo assclown, sup')
           assert_equal [], Obscenity::Base.offensive('Hello world')
         end
       end
@@ -222,7 +222,7 @@ class TestBase < Test::Unit::TestCase
           Obscenity::Base.whitelist = ['biatch']
         }
         should "return an array with the offensive words based on the default blacklist and custom whitelist" do
-          assert_equal ['assclown'], Obscenity::Base.offensive('Yo assclown, sup')
+          assert_equal ['ass', 'assclown'], Obscenity::Base.offensive('Yo assclown, sup')
           assert_equal [], Obscenity::Base.offensive('Yo biatch, sup')
         end
       end
