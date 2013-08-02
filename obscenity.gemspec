@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "obscenity"
-  s.version = "1.0.3"
+  s.version = "1.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Thiago Jackiw"]
-  s.date = "2013-07-24"
+  s.date = "2013-08-02"
   s.description = " Obscenity is a profanity filter gem for Ruby/Rubinius, Rails (through ActiveModel), and Rack middleware "
   s.email = "tjackiw@gmail.com"
   s.extra_rdoc_files = [
